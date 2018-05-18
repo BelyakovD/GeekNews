@@ -8,7 +8,11 @@
     <meta name="author" content="Dmitry">
 
     <title>Geeknews</title>
-
+    <style>
+        .msgClass {
+            color: red;
+        }
+    </style>
     <!-- Bootstrap core CSS -->
     <!-- <link href="lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -27,6 +31,7 @@
             </nav>
             <a class="btn btn-outline" href="Login.html">Войти</a>
             <a class="btn btn-outline" href="Register.html">Регистрация</a>
+            <button class="btn btn-dark" id="logoutBtn">Выход</button>
         </div>
         <!--End Header-->
         <!--Main-->
@@ -39,6 +44,13 @@
                 </div>
             </form>
             <h2>Список разделов</h2>
+            <form>
+                <div class="msgClass">
+                    <div id="msgLogoff"></div>
+                    <div id="msg"></div>
+                    <ul id="formError"></ul>
+                </div>
+            </form>
             <p class="lead">Отображается список разделов и новостей из веб-апи. Раздел можно удалить и редактировать, если совершен вход на сайт.</p>
             <div class="row">
                 <div id="sectionsDiv" class="col-12">Сюда будут добавляются разделы, если веб-апи работает...</div>
@@ -158,7 +170,7 @@
                         <form>
                             <div class="form-group">
                                 <label for="newSectionUrl">Поле для ввода нового названия раздела</label>
-                                <input type="url" class="form-control" id="newSectionUrl" aria-describedby="urlHelp" placeholder="Enter url">
+                                <input class="form-control" id="newSectionUrl" aria-describedby="urlHelp" placeholder="Enter section name">
                                 <small id="urlHelp" class="form-text text-muted">Введенное название заменит собой предыдущее</small>
                             </div>
                             <button type="submit" class="btn btn-primary" onclick="EditSection()">Подтвердить</button>

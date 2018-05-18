@@ -33,9 +33,9 @@ namespace GeekNews
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.Cookie.Name = "SimpleWebApp";
+                options.Cookie.Name = "GeekNews";
                 options.LoginPath = "/";
-                options.Events.OnRedirectToLogin = context =>
+                options.Events.OnRedirectToAccessDenied = context =>
                 {
                     context.Response.StatusCode = 401;
                     return Task.CompletedTask;

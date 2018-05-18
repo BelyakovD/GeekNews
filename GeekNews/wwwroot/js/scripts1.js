@@ -65,8 +65,22 @@ function EditSection() {
     xmlhttp.send(JSON.stringify({ url: urlText, sectionId: editedId }));
 }
 
+function ParseResponseMsg() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "/api/Account/LogOff");
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE) {
+            var myObj = "";
+            myObj = xmlhttp.responseText != "" ? JSON.parse(xmlhttp.responseText) : {};
+            document.getElementById("msgLogoff").innerHTML = myObj.message;
+        }
+    }
+    xmlhttp.send();
+};
+
 function NewSection(SectionId) {
     editedId = SectionId;
 }
 
 LoadSections();
+document.getElementById("logoutBtn").addEventListener("click", ParseResponseMsg);
