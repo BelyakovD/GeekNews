@@ -100,7 +100,7 @@ namespace GeekNews.Controllers
 
         // DELETE: api/Sections/5
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteSection([FromRoute] int id)
         {
             if (!ModelState.IsValid)
