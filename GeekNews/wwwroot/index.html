@@ -1,0 +1,179 @@
+﻿
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="News">
+    <meta name="author" content="Dmitry">
+
+    <title>Geeknews</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- <link href="lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+
+        <!--Header-->
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+            <h5 class="my-0 mr-md-auto font-weight-normal">GeekNews</h5>
+            <nav class="my-2 my-md-0 mr-md-3">
+                <a class="p-2 text-dark" href="#">Lorem</a>
+                <a class="p-2 text-dark" href="#">Ipsum</a>
+                <a class="p-2 text-dark" href="#">Dolor</a>
+            </nav>
+            <a class="btn btn-outline" href="Login.html">Войти</a>
+            <a class="btn btn-outline" href="Register.html">Регистрация</a>
+        </div>
+        <!--End Header-->
+        <!--Main-->
+        <div>
+            <form>
+                <div class="msgClass">
+                    <div id="msgDel"></div>
+                    <div id="msg"></div>
+                    <ul id="formError"></ul>
+                </div>
+            </form>
+            <h2>Список разделов</h2>
+            <p class="lead">Отображается список разделов и новостей из веб-апи. Раздел можно удалить и редактировать, если совершен вход на сайт.</p>
+            <div class="row">
+                <div id="sectionsDiv" class="col-12">Сюда будут добавляются разделы, если веб-апи работает...</div>
+            </div>
+
+            <br>
+            <hr>
+            <h2>Создание раздела</h2>
+            <p class="lead">Раздел можно создать и редактировать.</p>
+            <div class="row">
+                <div id="sectionsDiv" class="col-lg-6">
+                    <form>
+                        <div class="form-group">
+                            <label for="createDiv">Название раздела</label>
+                            <input id="createDiv" class="form-control" type="text" placeholder="Раздел" required>
+                        </div>
+                        <button onclick="CreateSection();" type="submit" class='btn btn-dark'>Создать раздел</button>
+                        <button onclick="location.reload();" type="button" class='btn btn-success'>Обновить страницу</button>
+                    </form>
+                </div>
+            </div>
+
+            <!--<br>
+    <hr>
+    <p>Пример верстки поста</p>
+    <div class="blog-post">
+        <h3 class="blog-post-title">Another blog post</h3>
+        <p class="blog-post-meta">December 23, 2017 by <a href="#">Ivan</a></p>
+
+        <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
+        <blockquote>
+            <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+        </blockquote>
+        <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+    </div> /.blog-post -->
+        </div>
+        <!--End Main-->
+        <!--Footer-->
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <small class="d-block mb-3 text-muted">GeekNews&copy;</small>
+                    <small class="d-block mb-3 text-muted">2017-2018</small>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Sit amet</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Consectetur</a></li>
+                        <li><a class="text-muted" href="#">Adipiscing</a></li>
+                        <li><a class="text-muted" href="#">Elit</a></li>
+                        <li><a class="text-muted" href="#">Eiusmod</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Excepteur</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Tempor</a></li>
+                        <li><a class="text-muted" href="#">Incididunt</a></li>
+                        <li><a class="text-muted" href="#">Labore</a></li>
+                        <li><a class="text-muted" href="#">Ullamco</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Nemo</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Voluptatem</a></li>
+                        <li><a class="text-muted" href="#">Accusantium </a></li>
+                        <li><a class="text-muted" href="#">Doloremque </a></li>
+                        <li><a class="text-muted" href="#">Laudantium</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+        <!--End Footer-->
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="msgClass">
+                                <div id="msg"></div>
+                                <ul id="formError"></ul>
+                            </div>
+                            <div>
+                                <label for="">Email: </label><br />
+                                <input type="text" id="Email" name="Email">
+                            </div>
+                            <div>
+                                <label for="">Пароль: </label><br />
+                                <input type="password" id="Password" name="Password">
+                            </div>
+                        </form>
+                        <br>
+                        <button id="loginBtn" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">Окно редактирования</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="newSectionUrl">Поле для ввода нового названия раздела</label>
+                                <input type="url" class="form-control" id="newSectionUrl" aria-describedby="urlHelp" placeholder="Enter url">
+                                <small id="urlHelp" class="form-text text-muted">Введенное название заменит собой предыдущее</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary" onclick="EditSection()">Подтвердить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Modal-->
+    </div>
+    <!--<link href="lib/bootstrap/dist/js/bootstrap.js" "  />-->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="/js/scripts1.js"></script>
+</body>
+</html>
