@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using GeekNews.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 
 namespace GeekNews
@@ -26,6 +27,8 @@ namespace GeekNews
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<NewsBaseContext>().AddDefaultTokenProviders();
+
             services.AddMvc()
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -35,6 +38,13 @@ namespace GeekNews
             {
                 options.Cookie.Name = "GeekNews";
                 options.LoginPath = "/";
+                options.AccessDeniedPath = "/";
+                options.LogoutPath = "/";
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
                 options.Events.OnRedirectToAccessDenied = context =>
                 {
                     context.Response.StatusCode = 401;
@@ -42,8 +52,9 @@ namespace GeekNews
                 };
             });
 
+            services.AddMvc();
+
             services.AddDbContext<NewsBaseContext>(options =>options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<NewsBaseContext>();
         }
 
         private async Task CreateUserRoles(IServiceProvider serviceProvider)
@@ -71,7 +82,7 @@ namespace GeekNews
                     await userManager.AddToRoleAsync(admin, "admin");
                 }
             }
-            // Создание Пользвователя
+            // Создание Пользователя
             string userEmail = "user@mail.com";
             string userPassword = "Aa123456!";
             if (await userManager.FindByNameAsync(userEmail) == null)
@@ -88,6 +99,8 @@ namespace GeekNews
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider services)
         {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
             app.UseAuthentication();
 
             if (env.IsDevelopment())
