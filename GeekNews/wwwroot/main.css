@@ -1,0 +1,13 @@
+body {
+    background-color: red;
+    background-image: url(http://www.designbolts.com/wp-content/uploads/2012/11/Free-Simple-Black-Seamless-Pattern-for-Website-Background.jpg);
+}
+.container {
+    background-color: #e4dfdf;
+}
+footer{
+    padding-bottom: 15px;
+}
+footer>p{
+    margin:0;
+}

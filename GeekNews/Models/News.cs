@@ -9,6 +9,8 @@ namespace GeekNews.Models
         public int SectionId { get; set; }
         public string Content { get; set; }
         public string Title { get; set; }
+        public string Image { get; set; }
+        public string Date { get; set; }
 
         public Section Section { get; set; }
     }

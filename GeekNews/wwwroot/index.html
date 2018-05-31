@@ -15,25 +15,22 @@
     </style>
     <!-- Bootstrap core CSS -->
     <!-- <link href="lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />-->
+    <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 </head>
 
 <body>
     <div class="container">
-
-        <!--Header-->
-        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-            <h5 class="my-0 mr-md-auto font-weight-normal">GeekNews</h5>
-            <nav class="my-2 my-md-0 mr-md-3">
-                <a class="p-2 text-dark" href="#">Lorem</a>
-                <a class="p-2 text-dark" href="#">Ipsum</a>
-                <a class="p-2 text-dark" href="#">Dolor</a>
-            </nav>
-            <a class="btn btn-outline" href="Login.html">Войти</a>
-            <a class="btn btn-outline" href="Register.html">Регистрация</a>
-            <button class="btn btn-dark" id="logoutBtn">Выход</button>
-        </div>
-        <!--End Header-->
+        <!--Navbar-->
+        <nav class="navbar">
+            <h2>GeekNews</h2>
+            <div class="navbar-right">
+                <button type="button" class="btn btn-dark">Войти</button>
+                <button type="button" class="btn btn-dark">Регистрация</button>
+                <button type="button" class="btn btn-dark">Выход</button>
+            </div>
+        </nav>
+        <!--End Navbar-->
         <!--Main-->
         <div>
             <form>
@@ -51,6 +48,18 @@
                     <ul id="formError"></ul>
                 </div>
             </form>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">один</div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">.длр</div>
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">.ш6вр</div>
+            </div>
             <p class="lead">Отображается список разделов и новостей из веб-апи. Раздел можно удалить и редактировать, если совершен вход на сайт.</p>
             <div class="row">
                 <div id="sectionsDiv" class="col-12">Сюда будут добавляются разделы, если веб-апи работает...</div>
@@ -89,40 +98,10 @@
         </div>
         <!--End Main-->
         <!--Footer-->
-        <footer class="pt-4 my-md-5 pt-md-5 border-top">
-            <div class="row">
-                <div class="col-12 col-md">
-                    <small class="d-block mb-3 text-muted">GeekNews&copy;</small>
-                    <small class="d-block mb-3 text-muted">2017-2018</small>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Sit amet</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Consectetur</a></li>
-                        <li><a class="text-muted" href="#">Adipiscing</a></li>
-                        <li><a class="text-muted" href="#">Elit</a></li>
-                        <li><a class="text-muted" href="#">Eiusmod</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Excepteur</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Tempor</a></li>
-                        <li><a class="text-muted" href="#">Incididunt</a></li>
-                        <li><a class="text-muted" href="#">Labore</a></li>
-                        <li><a class="text-muted" href="#">Ullamco</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Nemo</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Voluptatem</a></li>
-                        <li><a class="text-muted" href="#">Accusantium </a></li>
-                        <li><a class="text-muted" href="#">Doloremque </a></li>
-                        <li><a class="text-muted" href="#">Laudantium</a></li>
-                    </ul>
-                </div>
-            </div>
+        <br /><hr />
+        <footer>
+            <p>GeekNews - сайт, посвящённый новостям из мира игр, фильмов и комиксов.</p>
+            <p>Проект разработан Беляковым Д.А 3-41х в рамках курса конструирование интернет приложений.</p>
         </footer>
         <!--End Footer-->
         <!-- Modal -->
@@ -181,11 +160,11 @@
         </div>
         <!--End Modal-->
     </div>
-    <!--<link href="lib/bootstrap/dist/js/bootstrap.js" "  />-->
+        <!--<link href="lib/bootstrap/dist/js/bootstrap.js" "  />-->
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <script src="/js/scripts1.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+        <script src="/js/scripts1.js"></script>
 </body>
 </html>

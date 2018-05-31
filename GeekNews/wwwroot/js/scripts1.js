@@ -18,7 +18,9 @@ function LoadSections() {
         for (j in myObj[i].news) {
             x += `
                 <div class='col-10'><br>
+                <a href="#"><img src="${myObj[i].news[j].image}"></a>
                 <h4>${myObj[i].news[j].title}</h4>
+                <h4>${myObj[i].news[j].date}</h4>
                 <p>${myObj[i].news[j].content}</p><br>
                 </div>
             `;
