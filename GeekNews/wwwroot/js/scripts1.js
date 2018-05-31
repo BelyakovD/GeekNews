@@ -7,26 +7,22 @@ function LoadSections() {
     request.send();
 
     myObj = JSON.parse(request.responseText);
-    for (i in myObj) {
         x += `
-            <hr>
-            <h4> Раздел: <a href="${myObj[i].url}">${myObj[i].url}</a></h4><br>
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteSection(${myObj[i].sectionId})">Удалить</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="NewSection(${myObj[i].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteSection(${myObj[0].sectionId})">Удалить</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="NewSection(${myObj[0].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
         `;
 
-        for (j in myObj[i].news) {
+        for (j in myObj[0].news) {
             x += `
                 <div class='col-10'><br>
-                <a href="#"><img src="${myObj[i].news[j].image}"></a>
-                <h4>${myObj[i].news[j].title}</h4>
-                <h4>${myObj[i].news[j].date}</h4>
-                <p>${myObj[i].news[j].content}</p><br>
+                <img src="${myObj[0].news[j].image}">
+                <h4>${myObj[0].news[j].title}</h4>
+                <h4>${myObj[0].news[j].date}</h4>
+                <p>${myObj[0].news[j].content}</p><br>
                 </div>
             `;
         }
-    }
-    document.getElementById("sectionsDiv").innerHTML = x;
+    document.getElementById("nav-game").innerHTML = x;
 }
 
 function DeleteSection(SectionId) {
