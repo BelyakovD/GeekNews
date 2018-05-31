@@ -7,22 +7,54 @@ function LoadSections() {
     request.send();
 
     myObj = JSON.parse(request.responseText);
-        x += `
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteSection(${myObj[0].sectionId})">Удалить</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="NewSection(${myObj[0].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
-        `;
 
-        for (j in myObj[0].news) {
-            x += `
-                <div class='col-10'><br>
-                <img src="${myObj[0].news[j].image}">
-                <h4>${myObj[0].news[j].title}</h4>
-                <h4>${myObj[0].news[j].date}</h4>
-                <p>${myObj[0].news[j].content}</p><br>
-                </div>
-            `;
-        }
-    document.getElementById("nav-game").innerHTML = x;
+    for (j in myObj[0].news) {
+        x += `
+            <div class="col-md-6">
+            <img src="${myObj[0].news[j].image}">
+            <h4>${myObj[0].news[j].title}</h4>
+            <p>${myObj[0].news[j].content}</p>
+            <h6>${myObj[0].news[j].date}</h6>
+            </div>
+        `;
+    }
+    /*x += `
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteSection(${myObj[0].sectionId})">Удалить</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="NewSection(${myObj[0].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
+    `;*/
+    document.getElementById("sectionGame").innerHTML = x; x = "";
+
+    for (j in myObj[1].news) {
+        x += `
+            <div class="col-md-6">
+            <img src="${myObj[1].news[j].image}">
+            <h4>${myObj[1].news[j].title}</h4>
+            <p>${myObj[1].news[j].content}</p>
+            <h6>${myObj[1].news[j].date}</h6>
+            </div>
+        `;
+    }
+    /*x += `
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteSection(${myObj[1].sectionId})">Удалить</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="NewSection(${myObj[1].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
+    `;*/
+    document.getElementById("sectionFilm").innerHTML = x; x = "";
+
+    for (j in myObj[2].news) {
+        x += `
+            <div class="col-md-6">
+            <img src="${myObj[2].news[j].image}">
+            <h4>${myObj[2].news[j].title}</h4>
+            <p>${myObj[2].news[j].content}</p>
+            <h6>${myObj[2].news[j].date}</h6>
+            </div>
+        `;
+    }
+    /*x += `
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteSection(${myObj[2].sectionId})">Удалить</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="NewSection(${myObj[2].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
+    `;*/
+    document.getElementById("sectionComics").innerHTML = x;
 }
 
 function DeleteSection(SectionId) {
