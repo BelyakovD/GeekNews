@@ -25,9 +25,14 @@
         <nav class="row navbar">
             <h2>GeekNews</h2>
             <div class="navbar-right">
-                <button type="button" class="btn btn-dark">Войти</button>
-                <button type="button" class="btn btn-dark">Регистрация</button>
-                <button type="button" class="btn btn-dark">Выход</button>
+                <button type="button" id="logModalBtn" data-toggle="modal" data-target="#loginModal" class="btn btn-dark">Войти</button>
+                <button type="button" id="regModalBtn" data-toggle="modal" data-target="#exampleModal" class="btn btn-dark">Регистрация</button>
+                <button type="button" id="logoutBtn" class="btn btn-dark">Выход</button>
+                <form>
+                    <div class="msgClass">
+                        <div id="msgAuth"></div>
+                    </div>
+                </form>
             </div>
         </nav>
         <!--End Navbar-->
@@ -36,16 +41,12 @@
             <form>
                 <div class="msgClass">
                     <div id="msgDel"></div>
-                    <div id="msg"></div>
-                    <ul id="formError"></ul>
                 </div>
             </form>
             <h2>Список разделов</h2>
             <form>
                 <div class="msgClass">
                     <div id="msgLogoff"></div>
-                    <div id="msg"></div>
-                    <ul id="formError"></ul>
                 </div>
             </form>
             <nav>
@@ -66,7 +67,7 @@
                     <div class="row" id="sectionComics"></div>
                 </div>
             </div>
-            
+
 
             <br>
             <hr>
@@ -98,7 +99,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Регистрация нового пользователя</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -106,8 +107,8 @@
                     <div class="modal-body">
                         <form>
                             <div class="msgClass">
-                                <div id="msg"></div>
-                                <ul id="formError"></ul>
+                                <div id="msgR"></div>
+                                <ul id="formErrorR"></ul>
                             </div>
                             <div>
                                 <label for="">Email: </label><br />
@@ -117,9 +118,44 @@
                                 <label for="">Пароль: </label><br />
                                 <input type="password" id="Password" name="Password">
                             </div>
+                            <div>
+                                <label for="">Подтверждение пароля: </label><br />
+                                <input type="password" id="PasswordConfirm" name="PasswordConfirm">
+                            </div>
                         </form>
                         <br>
-                        <button id="loginBtn" class="btn btn-primary">Submit</button>
+                        <button id="registerBtn" class="btn btn-primary">Подтвердить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalLabel">Регистрация нового пользователя</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="msgClass">
+                                <div id="msgL"></div>
+                                <ul id="formErrorL"></ul>
+                            </div>
+                            <div>
+                                <label for="">Email: </label><br />
+                                <input type="text" id="EmailL" name="Email">
+                            </div>
+                            <div>
+                                <label for="">Пароль: </label><br />
+                                <input type="password" id="PasswordL" name="Password">
+                            </div>
+                        </form>
+                        <br>
+                        <button id="loginBtn" class="btn btn-primary">Подтвердить</button>
                     </div>
                 </div>
             </div>

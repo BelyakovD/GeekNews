@@ -106,6 +106,9 @@ function ParseResponseMsg() {
         }
     }
     xmlhttp.send();
+    document.getElementById("logoutBtn").style.display = 'none';
+    document.getElementById("logModalBtn").style.display = '';
+    document.getElementById("regModalBtn").style.display = '';
 };
 
 function NewSection(SectionId) {
@@ -114,3 +117,94 @@ function NewSection(SectionId) {
 
 LoadSections();
 document.getElementById("logoutBtn").addEventListener("click", ParseResponseMsg);
+//document.getElementById("logoutBtn").style.display = 'none';
+
+/*Start reg*/
+function ParseResponseReg() {
+    email = document.getElementById("Email").value;
+    password = document.getElementById("Password").value;
+    passwordConfirm = document.getElementById("PasswordConfirm").value;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "/api/account/Register");
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.onreadystatechange = function () {
+        document.getElementById("msgR").innerHTML = ""
+        var mydiv = document.getElementById('formErrorR');
+        while (mydiv.firstChild) {
+            mydiv.removeChild(mydiv.firstChild);
+        }
+        myObj = JSON.parse(this.responseText);
+        document.getElementById("msgR").innerHTML = myObj.message;
+        if (myObj.error.length > 0) {
+            for (var i = 0; i < myObj.error.length; i++) {
+                var ul = document.getElementsByTagName("ul");
+                var li = document.createElement("li");
+                li.appendChild(document.createTextNode(myObj.error[i]));
+                ul[0].appendChild(li);
+            }
+        }
+        var msgR = document.getElementById("msgR").nodeValue;
+        console.log("hgd", msgR);
+        if (msgR.indexOf("Добавлен") != -1) {
+            document.getElementById("logoutBtn").style.display = '';
+            document.getElementById("logModalBtn").style.display = 'none';
+            document.getElementById("regModalBtn").style.display = 'none';
+            document.getElementById("registerBtn").style.display = 'none';
+        }
+        document.getElementById("Password").value = "";
+        document.getElementById("PasswordConfirm").value = "";
+    };
+    xmlhttp.send(JSON.stringify({
+        email: email,
+        password: password,
+        passwordConfirm: passwordConfirm
+    }));
+};
+document.getElementById("registerBtn").addEventListener("click", ParseResponseReg);
+/*End reg*/
+
+/*Start log*/
+function ParseResponseLog() {
+    email = document.getElementById("EmailL").value;
+    password = document.getElementById("PasswordL").value;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "/api/Account/Login");
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.onreadystatechange = function () {
+        document.getElementById("msgL").innerHTML = ""
+        var mydiv = document.getElementById('formErrorL');
+        while (mydiv.firstChild) {
+            mydiv.removeChild(mydiv.firstChild);
+        }
+        myObj = JSON.parse(this.responseText);
+        document.getElementById("msgL").innerHTML = myObj.message;
+        if (typeof myObj.error !== "undefined" && myObj.error.length > 0) {
+            for (var i = 0; i < myObj.error.length; i++) {
+                var ul = document.getElementsByTagName("ul");
+                var li = document.createElement("li");
+                li.appendChild(document.createTextNode(myObj.error[i]));
+                ul[0].appendChild(li);
+            }
+        }
+        document.getElementById("PasswordL").value = "";
+    };
+    xmlhttp.send(JSON.stringify({
+        email: email,
+        password: password
+    }));
+};
+document.getElementById("loginBtn").addEventListener("click", ParseResponseLog);
+/*End log*/
+
+function GetCurrentUser() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "/api/Account/isAuthenticated", true);
+    xmlhttp.onreadystatechange = function () {
+        var myObj = "";
+        myObj = xmlhttp.responseText != "" ? JSON.parse(xmlhttp.responseText) : {};
+        document.getElementById("msgAuth").innerHTML = myObj.message;
+        if ()
+    }
+    xmlhttp.send();
+}
+GetCurrentUser();
