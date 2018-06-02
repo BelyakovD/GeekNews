@@ -24,3 +24,6 @@ img{
 .btn {
     margin-bottom: 15px;
 }
+#logModalBtn, #regModalBtn, #logoutBtn {
+    margin-top: 10px;
+}

@@ -124,12 +124,19 @@ namespace GeekNews.Controllers
         public async Task<IActionResult> LogisAuthenticatedOff()
         {
             User usr = await GetCurrentUserAsync();
-            var message = usr == null ? "Вы Гость. Пожалуйста, выполните вход." : "Вы вошли как: " + usr.UserName;
+            var message = usr == null ? "Вы Гость. Пожалуйста, выполните вход." : "Добро пожаловать, " + usr.UserName;
             var msg = new
                 {
                     message
                 };
-            return Ok(msg);
+            if (usr == null)
+            {
+                return Ok();
+            }
+            else
+            {
+                return Ok(msg);
+            }
         }
         private Task<User> GetCurrentUserAsync() =>
         _userManager.GetUserAsync(HttpContext.User);

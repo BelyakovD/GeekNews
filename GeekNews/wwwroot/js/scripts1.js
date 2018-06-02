@@ -16,7 +16,9 @@ function LoadSections() {
             <div>${myObj[0].news[j].content}</div>
             <h6>${myObj[0].news[j].date}</h6>
             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteNews(${myObj[0].news[j].newsId})" data-toggle="modal" data-target="#delModal">Удалить</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="EditNews(${myObj[0].news[j].newsId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="EditNews(${myObj[0].news[j].newsId}, '${myObj[0].news[j].title}', 
+                \`${escapeHtml(myObj[0].news[j].content)}\`, '${myObj[0].news[j].image}', '${myObj[0].news[j].date}', 
+                  ${myObj[0].news[j].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
             </div>
         `;
     }
@@ -27,15 +29,15 @@ function LoadSections() {
             <div class="col-md-6">
             <img src="${myObj[1].news[j].image}">
             <h4>${myObj[1].news[j].title}</h4>
-            <p>${myObj[1].news[j].content}</p>
+            <div>${myObj[1].news[j].content}</div>
             <h6>${myObj[1].news[j].date}</h6>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteNews(${myObj[1].news[j].newsId})" data-toggle="modal" data-target="#delModal">Удалить</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="EditNews(${myObj[1].news[j].newsId}, '${myObj[1].news[j].title}', 
+                \`${escapeHtml(myObj[1].news[j].content)}\`, '${myObj[1].news[j].image}', '${myObj[1].news[j].date}', 
+                  ${myObj[1].news[j].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
             </div>
         `;
     }
-    /*x += `
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteSection(${myObj[1].sectionId})">Удалить</button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="NewSection(${myObj[1].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
-    `;*/
     document.getElementById("sectionFilm").innerHTML = x; x = "";
 
     for (j in myObj[2].news) {
@@ -43,33 +45,42 @@ function LoadSections() {
             <div class="col-md-6">
             <img src="${myObj[2].news[j].image}">
             <h4>${myObj[2].news[j].title}</h4>
-            <p>${myObj[2].news[j].content}</p>
+            <div>${myObj[2].news[j].content}</div>
             <h6>${myObj[2].news[j].date}</h6>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteNews(${myObj[2].news[j].newsId})" data-toggle="modal" data-target="#delModal">Удалить</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="EditNews(${myObj[2].news[j].newsId}, '${myObj[2].news[j].title}', 
+                \`${escapeHtml(myObj[2].news[j].content)}\`, '${myObj[2].news[j].image}', '${myObj[2].news[j].date}', 
+                  ${myObj[2].news[j].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
             </div>
         `;
     }
-    /*x += `
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteSection(${myObj[2].sectionId})">Удалить</button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="NewSection(${myObj[2].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
-    `;*/
     document.getElementById("sectionComics").innerHTML = x;
 }
 LoadSections();
+
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 
 function DeleteNews(NewsId) {
     var request = new XMLHttpRequest();
 
     request.onload = function (ev) {
-        var msg = ""
-        if (request.status == 401) {
+        var msg = "";
+        if (request.status === 401) {
             msg = "У вас не хватает прав для удаления";
-        } else if (request.status == 200) {
+        } else if (request.status === 200) {
             msg = "Запись удалена, обновите страницу";
         } else {
             msg = "Неизвестная ошибка";
         }
         document.getElementById("msgDel").innerHTML = msg;
-    }
+    };
 
     url = "/api/News/" + NewsId;
     request.open("DELETE", url, false);
@@ -78,13 +89,13 @@ function DeleteNews(NewsId) {
 
 function CreateNew() {
     titleText = document.getElementById("createTitle").value;
-    if (document.getElementById("sectionChoose").value == "Игры") idNum = 25;
-    else if (document.getElementById("sectionChoose").value == "Фильмы") idNum = 26;
+    if (document.getElementById("sectionChoose").value === "Игры") idNum = 25;
+    else if (document.getElementById("sectionChoose").value === "Фильмы") idNum = 26;
     else idNum = 1025;
     contentText = document.getElementById("contentAdd").value;
     imgUrl = document.getElementById("img").value;
     dateText = document.getElementById("createDate").value;
-    if (imgUrl.indexOf('://') > 0 && titleText != "" && contentText != "" && dateText != "") {
+    if (imgUrl.indexOf('://') > 0 && titleText !== "" && contentText !== "" && dateText !== "") {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", "/api/News");
         xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -92,19 +103,25 @@ function CreateNew() {
     }
 }
 
-function EditNews(NewsId) {
+function EditNews(NewsId, Title, Content, Imge, Date, Section) {
     editedId = NewsId;
+    document.getElementById("editTitle").value = Title;
+    document.getElementById("contentEdit").value = Content;
+    document.getElementById("imgEdit").value = Imge;
+    document.getElementById("editDate").value = Date;
+    if (Section === 26) document.getElementById("sectionEdit").value = "Фильмы";
+    if (Section === 1025) document.getElementById("sectionEdit").value = "Комиксы";
 }
 
 function EditNewsAfterModal() {
     titleText = document.getElementById("editTitle").value;
-    if (document.getElementById("sectionEdit").value == "Игры") idNum = 25;
-    else if (document.getElementById("sectionEdit").value == "Фильмы") idNum = 26;
+    if (document.getElementById("sectionEdit").value === "Игры") idNum = 25;
+    else if (document.getElementById("sectionEdit").value === "Фильмы") idNum = 26;
     else idNum = 1025;
     contentText = document.getElementById("contentEdit").value;
     imgUrl = document.getElementById("imgEdit").value;
     dateText = document.getElementById("editDate").value;
-    if (imgUrl.indexOf('://') > 0 && titleText != "" && contentText != "" && dateText != "")
+    if (imgUrl.indexOf('://') > 0 && titleText !== "" && contentText !== "" && dateText !== "")
     {
         var xmlhttp = new XMLHttpRequest();
         url1 = "/api/News/" + editedId;
@@ -120,18 +137,15 @@ function ParseResponseMsg() {
     xmlhttp.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE) {
             var myObj = "";
-            myObj = xmlhttp.responseText != "" ? JSON.parse(xmlhttp.responseText) : {};
+            myObj = xmlhttp.responseText !== "" ? JSON.parse(xmlhttp.responseText) : {};
             document.getElementById("msgLogoff").innerHTML = myObj.message;
+            
         }
-    }
+        location.reload();
+    };
     xmlhttp.send();
-    /*document.getElementById("logoutBtn").style.display = 'none';
-    document.getElementById("logModalBtn").style.display = '';
-    document.getElementById("regModalBtn").style.display = '';*/
-};
-
+}
 document.getElementById("logoutBtn").addEventListener("click", ParseResponseMsg);
-//document.getElementById("logoutBtn").style.display = 'none';
 
 /*Start reg*/
 function ParseResponseReg() {
@@ -142,14 +156,14 @@ function ParseResponseReg() {
     xmlhttp.open("POST", "/api/account/Register");
     xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlhttp.onreadystatechange = function () {
-        document.getElementById("msgR").innerHTML = ""
+        document.getElementById("msgR").innerHTML = "";
         var mydiv = document.getElementById('formErrorR');
         while (mydiv.firstChild) {
             mydiv.removeChild(mydiv.firstChild);
         }
         myObj = JSON.parse(this.responseText);
         document.getElementById("msgR").innerHTML = myObj.message;
-        if (myObj.error.length > 0) {
+        if (typeof myObj.error !== "undefined" && myObj.error.length > 0) {
             for (var i = 0; i < myObj.error.length; i++) {
                 var ul = document.getElementsByTagName("ul");
                 var li = document.createElement("li");
@@ -157,14 +171,7 @@ function ParseResponseReg() {
                 ul[0].appendChild(li);
             }
         }
-        var msgR = document.getElementById("msgR").nodeValue;
-        console.log("hgd", msgR);
-        if (msgR.indexOf("Добавлен") != -1) {
-            /*document.getElementById("logoutBtn").style.display = '';
-            document.getElementById("logModalBtn").style.display = 'none';
-            document.getElementById("regModalBtn").style.display = 'none';
-            document.getElementById("registerBtn").style.display = 'none';*/
-        }
+        else location.reload();
         document.getElementById("Password").value = "";
         document.getElementById("PasswordConfirm").value = "";
     };
@@ -173,7 +180,7 @@ function ParseResponseReg() {
         password: password,
         passwordConfirm: passwordConfirm
     }));
-};
+}
 document.getElementById("registerBtn").addEventListener("click", ParseResponseReg);
 /*End reg*/
 
@@ -185,7 +192,7 @@ function ParseResponseLog() {
     xmlhttp.open("POST", "/api/Account/Login");
     xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlhttp.onreadystatechange = function () {
-        document.getElementById("msgL").innerHTML = ""
+        document.getElementById("msgL").innerHTML = "";
         var mydiv = document.getElementById('formErrorL');
         while (mydiv.firstChild) {
             mydiv.removeChild(mydiv.firstChild);
@@ -194,50 +201,45 @@ function ParseResponseLog() {
         document.getElementById("msgL").innerHTML = myObj.message;
         if (typeof myObj.error !== "undefined" && myObj.error.length > 0) {
             for (var i = 0; i < myObj.error.length; i++) {
-                var ul = document.getElementsByTagName("ul");
+                var ul = document.getElementsByTagName("ol");
                 var li = document.createElement("li");
                 li.appendChild(document.createTextNode(myObj.error[i]));
                 ul[0].appendChild(li);
             }
         }
+        else location.reload();
         document.getElementById("PasswordL").value = "";
     };
     xmlhttp.send(JSON.stringify({
         email: email,
         password: password
     }));
-};
+}
 document.getElementById("loginBtn").addEventListener("click", ParseResponseLog);
 /*End log*/
-
-function GetCurrentUser() {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", "/api/Account/isAuthenticated", true);
-    xmlhttp.onreadystatechange = function () {
-        var myObj = "";
-        myObj = xmlhttp.responseText != "" ? JSON.parse(xmlhttp.responseText) : {};
-        document.getElementById("msgAuth").innerHTML = myObj.message;
-    }
-    xmlhttp.send();
-}
-GetCurrentUser();
 
 function AuthAuto() {
     var req = new XMLHttpRequest();
     req.open("POST", "/api/account/isauthenticated", true);
     req.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            if (this.responseText == "") {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {            
+            if (this.responseText === "") {
                 //auth = null;
-                document.getElementById("logoutBtn").style.display = '';
-                document.getElementById("logModalBtn").style.display = 'none';
-                document.getElementById("regModalBtn").style.display = 'none';
-               
-            } else {
-                //auth = true;
+                document.getElementById("msgAuth").innerHTML = "Вы Гость. Пожалуйста, выполните вход.";
                 document.getElementById("logoutBtn").style.display = 'none';
                 document.getElementById("logModalBtn").style.display = '';
-                document.getElementById("regModalBtn").style.display = '';           
+                document.getElementById("regModalBtn").style.display = '';
+                document.getElementById("nav-new-tab").style.display = 'none';
+            }
+            else {
+                //auth = true;
+                var myObj = "";
+                myObj = req.responseText !== "" ? JSON.parse(req.responseText) : {};
+                document.getElementById("msgAuth").innerHTML = myObj.message;
+                document.getElementById("logoutBtn").style.display = '';
+                document.getElementById("logModalBtn").style.display = 'none';
+                document.getElementById("regModalBtn").style.display = 'none';  
+                document.getElementById("nav-new-tab").style.display = '';
             }
         }
     };

@@ -85,7 +85,6 @@ namespace GeekNews.Controllers
 
         // POST: api/News
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> PostNews([FromBody] News news)
         {
             if (!ModelState.IsValid)
