@@ -13,15 +13,13 @@ function LoadSections() {
             <div class="col-md-6">
             <img src="${myObj[0].news[j].image}">
             <h4>${myObj[0].news[j].title}</h4>
-            <p>${myObj[0].news[j].content}</p>
+            <div>${myObj[0].news[j].content}</div>
             <h6>${myObj[0].news[j].date}</h6>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteNews(${myObj[0].news[j].newsId})" data-toggle="modal" data-target="#delModal">Удалить</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="EditNews(${myObj[0].news[j].newsId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
             </div>
         `;
     }
-    /*x += `
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteSection(${myObj[0].sectionId})">Удалить</button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="NewSection(${myObj[0].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
-    `;*/
     document.getElementById("sectionGame").innerHTML = x; x = "";
 
     for (j in myObj[1].news) {
@@ -56,8 +54,9 @@ function LoadSections() {
     `;*/
     document.getElementById("sectionComics").innerHTML = x;
 }
+LoadSections();
 
-function DeleteSection(SectionId) {
+function DeleteNews(NewsId) {
     var request = new XMLHttpRequest();
 
     request.onload = function (ev) {
@@ -65,34 +64,54 @@ function DeleteSection(SectionId) {
         if (request.status == 401) {
             msg = "У вас не хватает прав для удаления";
         } else if (request.status == 200) {
-            msg = "Запись удалена";
+            msg = "Запись удалена, обновите страницу";
         } else {
             msg = "Неизвестная ошибка";
         }
         document.getElementById("msgDel").innerHTML = msg;
     }
 
-    url = "/api/Sections/" + SectionId;
+    url = "/api/News/" + NewsId;
     request.open("DELETE", url, false);
     request.send();
-    location.reload();
 }
 
-function CreateSection() {
-    urlText = document.getElementById("createDiv").value;
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", "/api/Connect/");
-    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xmlhttp.send(JSON.stringify({ url: urlText }));
+function CreateNew() {
+    titleText = document.getElementById("createTitle").value;
+    if (document.getElementById("sectionChoose").value == "Игры") idNum = 25;
+    else if (document.getElementById("sectionChoose").value == "Фильмы") idNum = 26;
+    else idNum = 1025;
+    contentText = document.getElementById("contentAdd").value;
+    imgUrl = document.getElementById("img").value;
+    dateText = document.getElementById("createDate").value;
+    if (imgUrl.indexOf('://') > 0 && titleText != "" && contentText != "" && dateText != "") {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "/api/News");
+        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xmlhttp.send(JSON.stringify({ sectionId: idNum, content: contentText, title: titleText, image: imgUrl, date: dateText }));
+    }
 }
 
-function EditSection() {
-    urlText = document.getElementById("newSectionUrl").value;
-    var xmlhttp = new XMLHttpRequest();
-    url1 = "/api/Sections/" + editedId;
-    xmlhttp.open("PUT", url1);
-    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xmlhttp.send(JSON.stringify({ url: urlText, sectionId: editedId }));
+function EditNews(NewsId) {
+    editedId = NewsId;
+}
+
+function EditNewsAfterModal() {
+    titleText = document.getElementById("editTitle").value;
+    if (document.getElementById("sectionEdit").value == "Игры") idNum = 25;
+    else if (document.getElementById("sectionEdit").value == "Фильмы") idNum = 26;
+    else idNum = 1025;
+    contentText = document.getElementById("contentEdit").value;
+    imgUrl = document.getElementById("imgEdit").value;
+    dateText = document.getElementById("editDate").value;
+    if (imgUrl.indexOf('://') > 0 && titleText != "" && contentText != "" && dateText != "")
+    {
+        var xmlhttp = new XMLHttpRequest();
+        url1 = "/api/News/" + editedId;
+        xmlhttp.open("PUT", url1);
+        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xmlhttp.send(JSON.stringify({ newsId: editedId, sectionId: idNum, content: contentText, title: titleText, image: imgUrl, date: dateText }));
+    }
 }
 
 function ParseResponseMsg() {
@@ -106,16 +125,11 @@ function ParseResponseMsg() {
         }
     }
     xmlhttp.send();
-    document.getElementById("logoutBtn").style.display = 'none';
+    /*document.getElementById("logoutBtn").style.display = 'none';
     document.getElementById("logModalBtn").style.display = '';
-    document.getElementById("regModalBtn").style.display = '';
+    document.getElementById("regModalBtn").style.display = '';*/
 };
 
-function NewSection(SectionId) {
-    editedId = SectionId;
-}
-
-LoadSections();
 document.getElementById("logoutBtn").addEventListener("click", ParseResponseMsg);
 //document.getElementById("logoutBtn").style.display = 'none';
 
@@ -146,10 +160,10 @@ function ParseResponseReg() {
         var msgR = document.getElementById("msgR").nodeValue;
         console.log("hgd", msgR);
         if (msgR.indexOf("Добавлен") != -1) {
-            document.getElementById("logoutBtn").style.display = '';
+            /*document.getElementById("logoutBtn").style.display = '';
             document.getElementById("logModalBtn").style.display = 'none';
             document.getElementById("regModalBtn").style.display = 'none';
-            document.getElementById("registerBtn").style.display = 'none';
+            document.getElementById("registerBtn").style.display = 'none';*/
         }
         document.getElementById("Password").value = "";
         document.getElementById("PasswordConfirm").value = "";
@@ -203,8 +217,30 @@ function GetCurrentUser() {
         var myObj = "";
         myObj = xmlhttp.responseText != "" ? JSON.parse(xmlhttp.responseText) : {};
         document.getElementById("msgAuth").innerHTML = myObj.message;
-        if ()
     }
     xmlhttp.send();
 }
 GetCurrentUser();
+
+function AuthAuto() {
+    var req = new XMLHttpRequest();
+    req.open("POST", "/api/account/isauthenticated", true);
+    req.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            if (this.responseText == "") {
+                //auth = null;
+                document.getElementById("logoutBtn").style.display = '';
+                document.getElementById("logModalBtn").style.display = 'none';
+                document.getElementById("regModalBtn").style.display = 'none';
+               
+            } else {
+                //auth = true;
+                document.getElementById("logoutBtn").style.display = 'none';
+                document.getElementById("logModalBtn").style.display = '';
+                document.getElementById("regModalBtn").style.display = '';           
+            }
+        }
+    };
+    req.send();
+}
+AuthAuto();

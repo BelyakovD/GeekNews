@@ -24,25 +24,16 @@
         <!--Navbar-->
         <nav class="row navbar">
             <h2>GeekNews</h2>
+            <h5 id="msgAuth" class="text-center"></h5>
             <div class="navbar-right">
                 <button type="button" id="logModalBtn" data-toggle="modal" data-target="#loginModal" class="btn btn-dark">Войти</button>
                 <button type="button" id="regModalBtn" data-toggle="modal" data-target="#exampleModal" class="btn btn-dark">Регистрация</button>
                 <button type="button" id="logoutBtn" class="btn btn-dark">Выход</button>
-                <form>
-                    <div class="msgClass">
-                        <div id="msgAuth"></div>
-                    </div>
-                </form>
             </div>
         </nav>
         <!--End Navbar-->
         <!--Main-->
         <main>
-            <form>
-                <div class="msgClass">
-                    <div id="msgDel"></div>
-                </div>
-            </form>
             <h2>Список разделов</h2>
             <form>
                 <div class="msgClass">
@@ -54,8 +45,10 @@
                     <a class="nav-item nav-link active" id="nav-game-tab" data-toggle="tab" href="#nav-game" role="tab" aria-controls="nav-game" aria-selected="true">Игры</a>
                     <a class="nav-item nav-link" id="nav-film-tab" data-toggle="tab" href="#nav-film" role="tab" aria-controls="nav-film" aria-selected="false">Фильмы</a>
                     <a class="nav-item nav-link" id="nav-comics-tab" data-toggle="tab" href="#nav-comics" role="tab" aria-controls="nav-comics" aria-selected="false">Комиксы</a>
+                    <a class="nav-item nav-link" id="nav-new-tab" data-toggle="tab" href="#nav-new" role="tab" aria-controls="nav-new" aria-selected="false">Добавить новость</a>
                 </div>
             </nav>
+            <br />
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-game" role="tabpanel" aria-labelledby="nav-game-tab">
                     <div class="row" id="sectionGame"></div>
@@ -66,23 +59,31 @@
                 <div class="tab-pane fade" id="nav-comics" role="tabpanel" aria-labelledby="nav-comics-tab">
                     <div class="row" id="sectionComics"></div>
                 </div>
-            </div>
-
-
-            <br>
-            <hr>
-            <h2>Создание раздела</h2>
-            <p class="lead">Раздел можно создать и редактировать.</p>
-            <div class="row">
-                <div id="sectionsDiv" class="col-lg-6">
-                    <form>
-                        <div class="form-group">
-                            <label for="createDiv">Название раздела</label>
-                            <input id="createDiv" class="form-control" type="text" placeholder="Раздел" required>
+                <div class="tab-pane fade" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab">
+                    <h2>Создание новости</h2>
+                    <div class="row">
+                        <div id="newsDiv" class="col-lg-6">
+                            <form>
+                                <div class="form-group">
+                                    <label for="createTitle">Заголовок новости</label>
+                                    <input id="createTitle" class="form-control" type="text" placeholder="Заголовок" required>
+                                    <label for="img">Ссылка на картинку</label>
+                                    <input id="img" class="form-control" type="url" placeholder="Вставьте url" required>
+                                    <label for="contentAdd">Содержание новости</label>
+                                    <textarea class="form-control" id="contentAdd" rows="10" required></textarea>
+                                    <label for="sectionChoose">Раздел новости</label>
+                                    <select class="form-control" id="sectionChoose">
+                                        <option>Игры</option>
+                                        <option>Фильмы</option>
+                                        <option>Комиксы</option>
+                                    </select>
+                                    <label for="createDate">Дата добавления новости</label>
+                                    <input id="createDate" class="form-control" type="date" required>
+                                </div>
+                                <button onclick="CreateNew();" type="submit" class='btn btn-dark'>Добавить</button>
+                            </form>
                         </div>
-                        <button onclick="CreateSection();" type="submit" class='btn btn-dark'>Создать раздел</button>
-                        <button onclick="location.reload();" type="button" class='btn btn-success'>Обновить страницу</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </main>
@@ -134,7 +135,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="loginModalLabel">Регистрация нового пользователя</h5>
+                        <h5 class="modal-title" id="loginModalLabel">Вход зарегистрированного пользователя</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -171,13 +172,45 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <h5>Внимание! Редактирование недоступно гостям.</h5>
                         <form>
                             <div class="form-group">
-                                <label for="newSectionUrl">Поле для ввода нового названия раздела</label>
-                                <input class="form-control" id="newSectionUrl" aria-describedby="urlHelp" placeholder="Enter section name">
-                                <small id="urlHelp" class="form-text text-muted">Введенное название заменит собой предыдущее</small>
+                                <label for="editTitle">Заголовок новости</label>
+                                <input id="editTitle" class="form-control" type="text" placeholder="Заголовок" required>
+                                <label for="imgEdit">Ссылка на картинку</label>
+                                <input id="imgEdit" class="form-control" type="url" placeholder="Вставьте url" required>
+                                <label for="contentEdit">Содержание новости</label>
+                                <textarea class="form-control" id="contentEdit" rows="5" required></textarea>
+                                <label for="sectionEdit">Раздел новости</label>
+                                <select class="form-control" id="sectionEdit">
+                                    <option>Игры</option>
+                                    <option>Фильмы</option>
+                                    <option>Комиксы</option>
+                                </select>
+                                <label for="editDate">Дата добавления новости</label>
+                                <input id="editDate" class="form-control" type="date" required>
                             </div>
-                            <button type="submit" class="btn btn-primary" onclick="EditSection()">Подтвердить</button>
+                            <button type="submit" class="btn btn-primary" onclick="EditNewsAfterModal()">Подтвердить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="delModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delModalLabel">Информация об удалении</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="msgClass">
+                                <div id="msgDel"></div>
+                            </div>
                         </form>
                     </div>
                 </div>

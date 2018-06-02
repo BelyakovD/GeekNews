@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GeekNews.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GeekNews.Controllers
 {
@@ -48,6 +49,7 @@ namespace GeekNews.Controllers
 
         // PUT: api/News/5
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutNews([FromRoute] int id, [FromBody] News news)
         {
             if (!ModelState.IsValid)
@@ -83,6 +85,7 @@ namespace GeekNews.Controllers
 
         // POST: api/News
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostNews([FromBody] News news)
         {
             if (!ModelState.IsValid)
@@ -98,6 +101,7 @@ namespace GeekNews.Controllers
 
         // DELETE: api/News/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteNews([FromRoute] int id)
         {
             if (!ModelState.IsValid)
