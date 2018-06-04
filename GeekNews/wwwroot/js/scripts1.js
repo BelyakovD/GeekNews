@@ -19,8 +19,10 @@ function LoadSections() {
             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="EditNews(${myObj[0].news[j].newsId}, '${myObj[0].news[j].title}', 
                 \`${escapeHtml(myObj[0].news[j].content)}\`, '${myObj[0].news[j].image}', '${myObj[0].news[j].date}', 
                   ${myObj[0].news[j].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
-            </div>
+            
         `;
+        x += `<button type="button" class="btn btn-sm btn-outline-secondary" >Нравится</button>
+              </div>`;
     }
     document.getElementById("sectionGame").innerHTML = x; x = "";
 
