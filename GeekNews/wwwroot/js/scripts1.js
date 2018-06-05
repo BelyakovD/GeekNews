@@ -1,12 +1,45 @@
-﻿var editedId = "";
+﻿var crrntUsr = "", editedId = "";
+
+function AuthAuto() {
+    var req = new XMLHttpRequest();
+    req.open("POST", "/api/account/isauthenticated", true);
+    req.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            if (this.responseText === "") {
+                //auth = null;
+                crrntUsr = "guest";
+                document.getElementById("msgAuth").innerHTML = "Вы Гость. Пожалуйста, выполните вход.";
+                document.getElementById("logoutBtn").style.display = 'none';
+                document.getElementById("logModalBtn").style.display = '';
+                document.getElementById("regModalBtn").style.display = '';
+                document.getElementById("nav-new-tab").style.display = 'none';
+            }
+            else {
+                //auth = true;
+                var myObj = "";
+                myObj = req.responseText !== "" ? JSON.parse(req.responseText) : {};
+                crrntUsr = myObj.message2;
+                document.getElementById("msgAuth").innerHTML = myObj.message;
+                document.getElementById("logoutBtn").style.display = '';
+                document.getElementById("logModalBtn").style.display = 'none';
+                document.getElementById("regModalBtn").style.display = 'none';
+                document.getElementById("nav-new-tab").style.display = '';
+            }
+        }
+        LoadSections();
+    };
+    req.send();
+}
+AuthAuto();
 
 function LoadSections() {
-    var myObj, i, j, x = "";
+    var allLikes, myObj, i, j, x = "";
     var request = new XMLHttpRequest();
     request.open("GET", "/api/Connect/", false);
     request.send();
-
     myObj = JSON.parse(request.responseText);
+    
+    allLikes = GetLikes();
 
     for (j in myObj[0].news) {
         x += `
@@ -18,10 +51,21 @@ function LoadSections() {
             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="DeleteNews(${myObj[0].news[j].newsId})" data-toggle="modal" data-target="#delModal">Удалить</button>
             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="EditNews(${myObj[0].news[j].newsId}, '${myObj[0].news[j].title}', 
                 \`${escapeHtml(myObj[0].news[j].content)}\`, '${myObj[0].news[j].image}', '${myObj[0].news[j].date}', 
-                  ${myObj[0].news[j].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
-            
+                  ${myObj[0].news[j].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>            
         `;
-        x += `<button type="button" class="btn btn-sm btn-outline-secondary" >Нравится</button>
+        var flag = 1, LikeCntr = 0;
+        for (i in allLikes) if (allLikes[i].newsId === myObj[0].news[j].newsId) LikeCntr++;
+        if (crrntUsr !== "guest")
+        for (i in allLikes) {
+            if (allLikes[i].newsId === myObj[0].news[j].newsId && allLikes[i].userId === crrntUsr) {
+                x += `<button type="button" class="btn btn-sm btn-outline-secondary active" role="button" aria-pressed="true"
+                       onclick="DeleteLike(${myObj[0].news[j].newsId})">Нравится ${LikeCntr}</button>
+              </div>`;
+                flag = 0;
+                }
+            }        
+        if (flag)
+            x += `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="LikeNews(${myObj[0].news[j].newsId})">Нравится ${LikeCntr}</button>
               </div>`;
     }
     document.getElementById("sectionGame").innerHTML = x; x = "";
@@ -37,8 +81,21 @@ function LoadSections() {
             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="EditNews(${myObj[1].news[j].newsId}, '${myObj[1].news[j].title}', 
                 \`${escapeHtml(myObj[1].news[j].content)}\`, '${myObj[1].news[j].image}', '${myObj[1].news[j].date}', 
                   ${myObj[1].news[j].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
-            </div>
         `;
+        flag = 1; LikeCntr = 0;
+        for (i in allLikes) if (allLikes[i].newsId === myObj[1].news[j].newsId) LikeCntr++;
+        if (crrntUsr !== "guest")
+            for (i in allLikes) {
+                if (allLikes[i].newsId === myObj[1].news[j].newsId && allLikes[i].userId === crrntUsr) {
+                    x += `<button type="button" class="btn btn-sm btn-outline-secondary active" role="button" aria-pressed="true"
+                       onclick="DeleteLike(${myObj[1].news[j].newsId})">Нравится ${LikeCntr}</button>
+                    </div>`;
+                    flag = 0;
+                }
+            }
+        if (flag)
+            x += `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="LikeNews(${myObj[1].news[j].newsId})">Нравится ${LikeCntr}</button>
+              </div>`;
     }
     document.getElementById("sectionFilm").innerHTML = x; x = "";
 
@@ -53,12 +110,59 @@ function LoadSections() {
             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="EditNews(${myObj[2].news[j].newsId}, '${myObj[2].news[j].title}', 
                 \`${escapeHtml(myObj[2].news[j].content)}\`, '${myObj[2].news[j].image}', '${myObj[2].news[j].date}', 
                   ${myObj[2].news[j].sectionId})" data-toggle="modal" data-target="#myModal">Редактировать</button>
-            </div>
         `;
+        flag = 1; LikeCntr = 0;
+        for (i in allLikes) if (allLikes[i].newsId === myObj[2].news[j].newsId) LikeCntr++;
+        if (crrntUsr !== "guest")
+            for (i in allLikes) {
+                if (allLikes[i].newsId === myObj[2].news[j].newsId && allLikes[i].userId === crrntUsr) {
+                    x += `<button type="button" class="btn btn-sm btn-outline-secondary active" role="button" aria-pressed="true"
+                       onclick="DeleteLike(${myObj[2].news[j].newsId})">Нравится ${LikeCntr}</button>
+                    </div>`;
+                    flag = 0;
+                }
+            }
+        if (flag)
+            x += `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="LikeNews(${myObj[2].news[j].newsId})">Нравится ${LikeCntr}</button>
+              </div>`;
     }
     document.getElementById("sectionComics").innerHTML = x;
 }
-LoadSections();
+
+function GetLikes() {
+    var myObj = "";
+    var request = new XMLHttpRequest();
+    request.open("GET", "/api/UserLikes/", false);
+    request.send();
+    return myObj = JSON.parse(request.responseText);
+}
+
+function LikeNews(NewsId) {
+    var user = crrntUsr;
+    if (user !== "guest") {
+        var xmlhttp = new XMLHttpRequest();    
+        xmlhttp.open("POST", "/api/UserLikes");
+        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xmlhttp.send(JSON.stringify({ newsId: NewsId, userId: user }));
+        LoadSections();
+    }
+    else alert("Данная функция недоступна гостям");
+}
+
+function DeleteLike(NewsId) {
+    var allLikes = GetLikes(), LikeId = 0;
+    for (i in allLikes) {
+        if (allLikes[i].newsId === NewsId && allLikes[i].userId === crrntUsr) {
+            LikeId = allLikes[i].id;
+            break;
+        }
+    }
+    var request = new XMLHttpRequest();
+    url = "/api/UserLikes/" + LikeId;
+    request.open("DELETE", url, false);
+    request.send();
+    LoadSections();
+}
 
 function escapeHtml(unsafe) {
     return unsafe
@@ -149,7 +253,6 @@ function ParseResponseMsg() {
 }
 document.getElementById("logoutBtn").addEventListener("click", ParseResponseMsg);
 
-/*Start reg*/
 function ParseResponseReg() {
     email = document.getElementById("Email").value;
     password = document.getElementById("Password").value;
@@ -184,9 +287,7 @@ function ParseResponseReg() {
     }));
 }
 document.getElementById("registerBtn").addEventListener("click", ParseResponseReg);
-/*End reg*/
 
-/*Start log*/
 function ParseResponseLog() {
     email = document.getElementById("EmailL").value;
     password = document.getElementById("PasswordL").value;
@@ -218,33 +319,3 @@ function ParseResponseLog() {
     }));
 }
 document.getElementById("loginBtn").addEventListener("click", ParseResponseLog);
-/*End log*/
-
-function AuthAuto() {
-    var req = new XMLHttpRequest();
-    req.open("POST", "/api/account/isauthenticated", true);
-    req.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {            
-            if (this.responseText === "") {
-                //auth = null;
-                document.getElementById("msgAuth").innerHTML = "Вы Гость. Пожалуйста, выполните вход.";
-                document.getElementById("logoutBtn").style.display = 'none';
-                document.getElementById("logModalBtn").style.display = '';
-                document.getElementById("regModalBtn").style.display = '';
-                document.getElementById("nav-new-tab").style.display = 'none';
-            }
-            else {
-                //auth = true;
-                var myObj = "";
-                myObj = req.responseText !== "" ? JSON.parse(req.responseText) : {};
-                document.getElementById("msgAuth").innerHTML = myObj.message;
-                document.getElementById("logoutBtn").style.display = '';
-                document.getElementById("logModalBtn").style.display = 'none';
-                document.getElementById("regModalBtn").style.display = 'none';  
-                document.getElementById("nav-new-tab").style.display = '';
-            }
-        }
-    };
-    req.send();
-}
-AuthAuto();

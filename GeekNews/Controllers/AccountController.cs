@@ -125,10 +125,11 @@ namespace GeekNews.Controllers
         {
             User usr = await GetCurrentUserAsync();
             var message = usr == null ? "Вы Гость. Пожалуйста, выполните вход." : "Добро пожаловать, " + usr.UserName;
-            var msg = new
-                {
-                    message
-                };
+            var message2 = usr == null ? "guest" : usr.Id;
+            var msg = new {            
+                message,
+                message2
+            };
             if (usr == null)
             {
                 return Ok();
