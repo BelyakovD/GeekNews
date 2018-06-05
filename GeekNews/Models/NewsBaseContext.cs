@@ -9,6 +9,7 @@ namespace GeekNews.Models
     {
         public virtual DbSet<News> News { get; set; }
         public virtual DbSet<Section> Section { get; set; }
+        public virtual DbSet<UserLikes> UserLikes { get; set; }
 
         public NewsBaseContext(DbContextOptions<NewsBaseContext> options)
             : base(options)
@@ -29,6 +30,16 @@ namespace GeekNews.Models
             {
                 entity.Property(e => e.Url).IsRequired();
             });
+
+            modelBuilder.Entity<News>()
+                .HasMany(e => e.UserLikes)
+                .WithOne(e => e.News)
+                .HasForeignKey(e => e.NewsId);
+
+            modelBuilder.Entity<User>()
+                .HasMany(p => p.UserLikes)
+                .WithOne(p => p.AspNetUsers)
+                .HasForeignKey(p => p.UserId);
         }
     }
 }

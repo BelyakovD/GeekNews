@@ -8,5 +8,10 @@ namespace GeekNews.Models
 {
     public class User : IdentityUser
     {
+        public User()
+        {
+            UserLikes = new HashSet<UserLikes>();
+        }
+        public virtual ICollection<UserLikes> UserLikes { get; set; }
     }
 }
